@@ -1,9 +1,27 @@
 <script setup>
 import { House } from "@/models/House.js";
+import { housesService } from "@/services/HousesService.js";
+import { logger } from "@/utils/Logger.js";
+import Pop from "@/utils/Pop.js";
 
 const props = defineProps({
   houseProp: { type: House, required: true }
 })
+
+
+async function deleteHouse() {
+  try {
+    const doesUserWantToDelete = await Pop.confirm(`Are you Sure you want to delete this House?`)
+    if (!doesUserWantToDelete) return
+    logger.log(`deleting House`)
+    const houseId = props.houseProp.id
+    await housesService.deleteHouse(houseId)
+  }
+  catch (error) {
+    Pop.error(error);
+    logger.log(error)
+  }
+}
 </script>
 
 
@@ -21,9 +39,13 @@ const props = defineProps({
             <p>{{ houseProp.bathrooms }} bathrooms, and {{ houseProp.bedrooms }} bedrooms</p>
             <p>{{ houseProp.description }}</p>
           </div>
-          <div>
-            <span>listed on {{ houseProp.createdAt.toLocaleDateString() }} by {{ houseProp.creatorName }}
-              <img class="creator-img" :src="houseProp.creatorPicture" :alt="houseProp.creatorName"></span>
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <span>listed on {{ houseProp.createdAt.toLocaleDateString() }} by {{ houseProp.creatorName }}
+                <img class="creator-img" :src="houseProp.creatorPicture" :alt="houseProp.creatorName"></span>
+            </div>
+            <span @click="deleteHouse()"><i role="button" class="fs-1 mdi mdi-trash-can-outline text-danger"
+                title="delete House Listing"></i></span>
           </div>
         </div>
       </div>
