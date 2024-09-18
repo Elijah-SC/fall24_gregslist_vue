@@ -1,12 +1,16 @@
 <script setup>
+import { AppState } from "@/AppState.js";
 import { House } from "@/models/House.js";
 import { housesService } from "@/services/HousesService.js";
 import { logger } from "@/utils/Logger.js";
 import Pop from "@/utils/Pop.js";
+import { computed } from "vue";
 
 const props = defineProps({
   houseProp: { type: House, required: true }
 })
+
+const account = computed(() => AppState.account)
 
 
 async function deleteHouse() {
@@ -33,7 +37,7 @@ async function deleteHouse() {
         <div>
           <img :src="houseProp.imgUrl" :alt="houseProp.description" class="house-img">
         </div>
-        <div class="p-3 d-flex flex-column justify-content-between">
+        <div class="p-3 d-flex flex-column justify-content-between flex-grow-1">
           <div>
             <h2>{{ houseProp.priceAsCurrency }} year: {{ houseProp.year }}</h2>
             <p>{{ houseProp.bathrooms }} bathrooms, and {{ houseProp.bedrooms }} bedrooms</p>
@@ -44,8 +48,8 @@ async function deleteHouse() {
               <span>listed on {{ houseProp.createdAt.toLocaleDateString() }} by {{ houseProp.creatorName }}
                 <img class="creator-img" :src="houseProp.creatorPicture" :alt="houseProp.creatorName"></span>
             </div>
-            <span @click="deleteHouse()"><i role="button" class="fs-1 mdi mdi-trash-can-outline text-danger"
-                title="delete House Listing"></i></span>
+            <span v-if="houseProp.creatorId == account?.id" @click="deleteHouse()"><i role="button"
+                class="fs-1 mdi mdi-trash-can-outline text-danger" title="delete House Listing"></i></span>
           </div>
         </div>
       </div>

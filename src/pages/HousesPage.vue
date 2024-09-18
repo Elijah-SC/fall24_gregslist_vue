@@ -8,6 +8,7 @@ import Pop from "@/utils/Pop.js";
 import { computed, onMounted } from "vue";
 
 const houses = computed(() => AppState.houses)
+const account = computed(() => AppState.account)
 
 onMounted(() =>
   getHouses()
@@ -29,7 +30,7 @@ async function getHouses() {
   <body class="container-fluid">
     <section class="row justify-content-center">
       <h1>Welcome to the Houses Page</h1>
-      <div>
+      <div v-if="account">
         <HouseForm />
       </div>
       <div class="col-9" v-for="house in houses" :key="house.id">
