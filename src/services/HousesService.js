@@ -4,6 +4,9 @@ import { House } from "@/models/House.js"
 import { AppState } from "@/AppState.js"
 
 class HousesService {
+  createHosue() {
+    throw new Error("Method not implemented.")
+  }
   async getHouses() {
     const response = await api.get(`api/houses`)
     logger.log(`getting Houses`, response.data)

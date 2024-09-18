@@ -9,12 +9,18 @@ export class House {
     this.price = data.price
     this.description = data.description
     this.creatorId = data.creatorId
-    this.createdAt = new Date(this.createdAt)
-    this.updatedAt = new Date(this.updatedAt)
+    this.createdAt = new Date(data.createdAt)
+    this.updatedAt = new Date(data.updatedAt)
     this.creatorName = data.creator.name
     this.creatorPicture = data.creator.picture
   }
+
+  get priceAsCurrency() {
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(this.price)
+  }
 }
+
+
 
 const houseData = {
   "_id": "645d60f381faf24223ae886b",
